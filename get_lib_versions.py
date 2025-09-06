@@ -5,7 +5,9 @@ packages = [
     "python-dotenv",
     "langchain_core",
     "streamlit",
-    "structlog"
+    "structlog",
+    "langchain-google-genai",
+    "langchain-groq"
 ]
 
 for pkg in packages:
