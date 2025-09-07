@@ -7,12 +7,32 @@ import undetected_chromedriver as uc
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.action_chains import ActionChains
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.common.exceptions import TimeoutException, NoSuchElementException, ElementNotInteractableException
 
 
 class FlipkartScraper:
     def __init__(self, output_dir="data"):
         self.output_dir = output_dir
         os.makedirs(self.output_dir, exist_ok=True)
+
+    def _close_popup_if_present(self, driver, timeout=3):
+        """Try to close the Flipkart login/signup popup if it appears."""
+        try:
+            close_btn = WebDriverWait(driver, timeout).until(
+                EC.element_to_be_clickable((By.XPATH, "//button[contains(text(), '✕')]"))
+            )
+            close_btn.click()
+            time.sleep(1)
+            print("Popup closed successfully")
+        except TimeoutException:
+            # no popup appeared within timeout
+            print("No popup found, continuing...")
+        except (NoSuchElementException, ElementNotInteractableException) as e:
+            print(f"Popup found but not clickable: {e}")
+        except Exception as e:
+            print(f"Unexpected error while closing popup: {e}")
 
     def get_top_reviews(self, product_url, count=2):
         """
@@ -24,23 +44,25 @@ class FlipkartScraper:
         driver = uc.Chrome(options=options, use_subprocess=True)
 
         if not product_url.startswith("http"):
-            return "No reviewsfound"
+            return "No reviews found"
         
         try:
             driver.get(product_url)
             time.sleep(4)
-            try:
-                driver.find_element(By.XPATH, "//button[contains(text(), '✕')]").click()
-                time.sleep(1)
-            except Exception as e:
-                print(f"Error occured while closing popup: {e}")
+            # try:
+            #     driver.find_element(By.XPATH, "//button[contains(text(), '✕')]").click()
+            #     time.sleep(1)
+            # except Exception as e:
+            #     print(f"Error occurred while closing popup: {e}")
+
+            self._close_popup_if_present(driver)
 
             for _ in range(4):
                 ActionChains(driver).send_keys(Keys.END).perform()
                 time.sleep(1.5)
             
             soup = BeautifulSoup(driver.page_source, "html.parser")
-            review_blocks = soup.select("div._27M-vq, div.col.EPCm3X, div._6K-7Co")
+            review_blocks = soup.select("div._27M-vq, div.col.EPCmJX, div._6K-7Co")
             seen = set()
             reviews = []
 
@@ -67,10 +89,11 @@ class FlipkartScraper:
         driver.get(search_url)
         time.sleep(4)
 
-        try:
-            driver.find_element(By.XPATH, "//button[contains(text(), '✕')]").click()
-        except Exception as e:
-            print(f"Error occured while closing popup: {e}")
+        # try:
+        #     driver.find_element(By.XPATH, "//button[contains(text(), '✕')]").click()
+        # except Exception as e:
+        #     print(f"Error occurred while closing popup: {e}")
+        self._close_popup_if_present(driver)
 
         time.sleep(2)
         products = []
@@ -88,10 +111,10 @@ class FlipkartScraper:
                 link_el = item.find_element(By.CSS_SELECTOR, "a[href*='/p/']")
                 href = link_el.get_attribute("href")
                 product_link = href if href.startswith("http") else "https://www.flipkart.com" + href
-                match = re.findall(r"/p(itm[0-9A-Za-z]+)", href)
+                match = re.findall(r"/p/(itm[0-9A-Za-z]+)", href)
                 product_id = match[0] if match else "N/A"
             except Exception as e:
-                print(f"Error occured while processing item: {e}")
+                print(f"Error occurred while processing item: {e}")
                 continue
 
             top_reviews = self.get_top_reviews(product_link, count=review_count) if "flipkart.com" in product_link else "Invalid product URL"
