@@ -3,9 +3,9 @@ import time
 import re
 import os
 from bs4 import BeautifulSoup
-import undetected_chromedriver as uc
-from selenium.webdriver.common.by import By
-from selenium.webdriver.common.keys import Keys
+import undetected_chromedriver as uc    # so that we are not seen as bots
+from selenium.webdriver.common.by import By    # to look at the elements like XPATH, CSS_SELECTOR 
+from selenium.webdriver.common.keys import Keys    # to automate scrolling
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -87,7 +87,7 @@ class FlipkartScraper:
         driver = uc.Chrome(options=options, use_subprocess=True)
         search_url = f"https://www.flipkart.com/search?q={query.replace(' ', '+')}"
         driver.get(search_url)
-        time.sleep(4)
+        time.sleep(4)    # to load the page
 
         # try:
         #     driver.find_element(By.XPATH, "//button[contains(text(), '✕')]").click()
