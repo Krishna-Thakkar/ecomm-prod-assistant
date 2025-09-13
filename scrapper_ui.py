@@ -10,6 +10,7 @@ st.title("📦 Product Review Scraper")
 if "product_inputs" not in st.session_state:
     st.session_state.product_inputs = [""]
 
+
 def add_product_input():
     st.session_state.product_inputs.append("")
 
@@ -53,7 +54,7 @@ if st.button("🚀 Start Scraping"):
         st.success("✅ Data saved to `data/product_reviews.csv`")
         st.download_button("📥 Download CSV", data=open(output_path, "rb"), file_name="product_reviews.csv")
 
-# This stays OUTSIDE "if st.button('Start Scraping')"
+# this stays OUTSIDE "if st.button('Start Scraping')"
 if "scraped_data" in st.session_state and st.button("🧠 Store in Vector DB (AstraDB)"):
     with st.spinner("📡 Initializing ingestion pipeline..."):
         try:
