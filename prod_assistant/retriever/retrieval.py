@@ -1,5 +1,7 @@
 import os
 from langchain_astradb import AstraDBVectorStore
+from langchain.retrievers.document_compressors import LLMChainExtractor
+from langchain.retrievers import ContextualCompressionRetriever
 from typing import List
 from langchain_core.documents import Document
 from utils.config_loader import load_config
@@ -43,9 +45,23 @@ class Retriever:
 
         if not self.retriever:
             top_k = self.config["retriever"]["top_k"] if "retriever" in self.config else 3
-            retriever = self.vstore.as_retriever(search_kwargs={"k": top_k})
+
+            mmr_retriever = self.vstore.as_retriever(
+                search_type="mmr",
+                search_kwargs={"k": top_k,
+                               "fetch_k": 20,
+                               "lambda_mult": 0.7,
+                               "score_threshold": 0.3
+                               })
             print("Retriever loaded successfully")
-            return retriever
+
+            llm = self.model_loader.load_llm()
+            compressor = LLMChainExtractor.from_llm(llm)
+            self.retriever = ContextualCompressionRetriever(
+                base_compressor=compressor,
+                base_retriever=mmr_retriever
+            )
+            return self.retriever
 
     def call_retriever(self, user_query):
         retriever = self.load_retriever()
