@@ -9,3 +9,7 @@ beautifulsoup4==4.13.5
 undetected-chromedriver==3.5.5
 selenium==4.35.0
 langchain-astradb==0.6.1
+langgraph==0.6.7
+ragas==0.3.4
+
+-e .
