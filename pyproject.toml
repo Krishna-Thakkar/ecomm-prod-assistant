@@ -13,6 +13,18 @@ dependencies = [
     "langchain==0.3.27",
     "python-dotenv==1.1.1",
     "streamlit==1.49.1",
+    "structlog==25.4.0",
+    "langchain-google-genai==2.1.8",
+    "langchain-groq==0.3.6",
+    "beautifulsoup4==4.13.5",
+    "undetected-chromedriver==3.5.5",
+    "selenium==4.35.0",
+    "langchain-astradb==0.6.1",
+    "langgraph==0.6.7",
+    "ragas==0.3.4",
+    "langchain-mcp-adapters==0.1.10",
+    "mcp==1.14.1",
+    "ddgs==9.6.0"
 ]
 
 # Optional: authors, license
