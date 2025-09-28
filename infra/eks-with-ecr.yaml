@@ -4,7 +4,7 @@ Description: Standalone EKS Cluster with NodeGroup and ECR Repository
 Parameters:
   ClusterName:
     Type: String
-    Default: product-assistant-cluster-latest
+    Default: product-assistant-cluster-001
   NodeInstanceType:
     Type: String
     Default: t3.medium
@@ -53,7 +53,7 @@ Resources:
           # added
         - Key: kubernetes.io/role/elb
           Value: 1
-        - Key: kubernetes.io/cluster/product-assistant-cluster-latest
+        - Key: kubernetes.io/cluster/product-assistant-cluster-001
           Value: shared
 
   PublicSubnet2:
@@ -69,7 +69,7 @@ Resources:
         # added
         - Key: kubernetes.io/role/elb
           Value: 1
-        - Key: kubernetes.io/cluster/product-assistant-cluster-latest
+        - Key: kubernetes.io/cluster/product-assistant-cluster-001
           Value: shared
 
   PublicRouteTable:
