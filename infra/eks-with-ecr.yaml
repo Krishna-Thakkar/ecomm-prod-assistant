@@ -126,6 +126,7 @@ Resources:
   EKSClusterRole:
     Type: AWS::IAM::Role
     Properties:
+      RoleName: EKSClusterRole-PA   # added a unique suffix
       AssumeRolePolicyDocument:
         Version: 2012-10-17
         Statement:
@@ -153,6 +154,7 @@ Resources:
   NodeGroupRole:
     Type: AWS::IAM::Role
     Properties:
+      RoleName: NodeGroupRole-PA    # added a unique suffix
       AssumeRolePolicyDocument:
         Version: 2012-10-17
         Statement:
