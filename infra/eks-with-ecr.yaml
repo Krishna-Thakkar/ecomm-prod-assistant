@@ -51,10 +51,10 @@ Resources:
         - Key: Name
           Value: PublicSubnet1
           # added
-        # - Key: kubernetes.io/role/elb
-        #   Value: 1
-        # - Key: kubernetes.io/cluster/product-assistant-cluster-001
-        #   Value: shared
+        - Key: kubernetes.io/role/elb
+          Value: 1
+        - Key: !Sub kubernetes.io/cluster/${ClusterName}
+          Value: shared
 
   PublicSubnet2:
     Type: AWS::EC2::Subnet
@@ -67,10 +67,10 @@ Resources:
         - Key: Name
           Value: PublicSubnet2
         # added
-        # - Key: kubernetes.io/role/elb
-        #   Value: 1
-        # - Key: kubernetes.io/cluster/product-assistant-cluster-001
-        #   Value: shared
+        - Key: kubernetes.io/role/elb
+          Value: 1
+        - Key: !Sub kubernetes.io/cluster/${ClusterName}
+          Value: shared
 
   PublicRouteTable:
     Type: AWS::EC2::RouteTable

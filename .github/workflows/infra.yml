@@ -21,9 +21,23 @@ jobs:
 
       # deploy CloudFormation stack
       - name: Deploy CloudFormation Stack
+        id: deploy    # added
+        continue-on-error: true    # added
         run: |
           aws cloudformation deploy \
             --stack-name product-assistant-cluster \
             --template-file infra/eks-with-ecr.yaml \
             --capabilities CAPABILITY_IAM CAPABILITY_NAMED_IAM \
             --region ${{ secrets.AWS_REGION }}
+      
+      # added
+      - name: Get Stack Events on Failure
+        if: failure()
+        run: |
+          echo "Stack deployment failed. Fetching events..."
+          aws cloudformation describe-stack-events \
+            --stack-name product-assistant-cluster \
+            --region ${{ secrets.AWS_REGION }} \
+            --max-items 20 \
+            --query 'StackEvents[?ResourceStatus==`CREATE_FAILED` || ResourceStatus==`UPDATE_FAILED`].[Timestamp,LogicalResourceId,ResourceStatusReason]' \
+            --output table
