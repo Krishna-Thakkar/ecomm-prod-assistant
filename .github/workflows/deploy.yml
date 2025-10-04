@@ -35,15 +35,22 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
 
+      - name: Set Image Tag
+        id: image-tag
+        run: |
+          echo "IMAGE_TAG=$(date +%s)" >> $GITHUB_ENV
+          echo "::set-output name=tag::$(date +%s)"
+
       # build, tag and push docker image to ECR
       - name: Build and Push Docker image
         env:
           REGISTRY: ${{ secrets.ECR_REGISTRY }}
           REPOSITORY: ${{ secrets.ECR_REPOSITORY }}
+          IMAGE_TAG: ${{ steps.image-tag.outputs.tag }}
         run: |
-          IMAGE_TAG=latest
-          docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG .
+          docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG -t $REGISTRY/$REPOSITORY:latest .
           docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
+          docker push $REGISTRY/$REPOSITORY:latest
 
       # setup kubectl
       - name: Setup kubectl
@@ -99,17 +106,25 @@ jobs:
           --dry-run=client -o yaml | kubectl apply -f -
 
       # deploy manifests
-      - name: Deploy to EKS
+      - name: Apply Kubernetes manifests
         run: |
           kubectl apply -f k8/deployment.yaml
           kubectl apply -f k8/service.yaml
+
+      - name: Patch deployment with new image tag
+        env:
+          REGISTRY: ${{ secrets.ECR_REGISTRY }}
+          REPOSITORY: ${{ secrets.ECR_REPOSITORY }}
+          IMAGE_TAG: ${{ steps.image-tag.outputs.tag }}
+        run: |
+          kubectl set image deployment/product-assistant product-assistant=$REGISTRY/$REPOSITORY:$IMAGE_TAG
 
       # verify rollout
       - name: Verify Deployment
         run: |
           set -e
           if ! kubectl rollout status deployment/product-assistant --timeout=120s; then
-            echo "❌ Rollout failed, collecting debug info..."
+            echo "Rollout failed, collecting debug info..."
             kubectl describe deployment product-assistant || true
             kubectl get pods -o wide || true
             for pod in $(kubectl get pods -l app=product-assistant -o jsonpath='{.items[*].metadata.name}'); do
