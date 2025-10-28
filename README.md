@@ -11,7 +11,7 @@
 [![LangChain](https://img.shields.io/badge/🦜_LangChain-Powered-00A67E.svg?style=for-the-badge)](https://github.com/langchain-ai/langchain)
 [![License](https://img.shields.io/badge/License-MIT-green.svg?style=for-the-badge)](LICENSE)
 
-<img src="static/logo.png" alt="ShopBuddy Logo" width="200"/>
+<img src="assets/logo.png" alt="ShopBuddy Logo" width="200"/>
 
 *Combining web scraping, vector databases, and agentic RAG workflows to deliver intelligent product insights*
 
