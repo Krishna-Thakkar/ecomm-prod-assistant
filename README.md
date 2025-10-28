@@ -36,11 +36,11 @@
 ### 💡 What Makes ShopBuddy Special?
 
 ```
-┌─────────────────────────────────────────────────────────────────┐
-│  🎨 Conversational UI  →  🧠 Agentic Workflow  →  📊 Smart Data  │
-│                                                                   │
-│  Natural Language  →  Multi-Agent Processing  →  Accurate Results │
-└─────────────────────────────────────────────────────────────────┘
+┌──────────────────────────────────────────────────────────────────┐
+│  🎨 Conversational UI  →  🧠 Agentic Workflow  →  📊 Smart Data  |
+│                                                                  │
+│  Natural Language  →  Multi-Agent Processing  →  Accurate Results│
+└──────────────────────────────────────────────────────────────────┘
 ```
 
 **Database Architecture:**
@@ -393,9 +393,6 @@ ASTRA_DB_ENDPOINT=your_astra_endpoint_here
 # LLM API Keys
 GROQ_API_KEY=your_groq_key_here
 GOOGLE_API_KEY=your_google_key_here
-
-# Optional: Search API
-DUCKDUCKGO_ENABLED=true
 ```
 </details>
 
@@ -750,46 +747,6 @@ Response quality
 - ✅ Update documentation
 - ✅ Use meaningful commit messages
 - ✅ Add comments for complex logic
-
----
-
-## 🗺️ Roadmap
-
-<table>
-<tr>
-<td width="33%">
-
-### 🎯 **Phase 1: Q1 2025**
-- [ ] Multi-vendor support
-  - Amazon integration
-  - Myntra products
-  - eBay listings
-- [ ] Enhanced UI/UX
-- [ ] Mobile responsiveness
-
-</td>
-<td width="33%">
-
-### 🚀 **Phase 2: Q2 2025**
-- [ ] Voice interface
-- [ ] Personalization engine
-- [ ] Price tracking alerts
-- [ ] Wishlist feature
-- [ ] Compare products
-
-</td>
-<td width="33%">
-
-### 🌟 **Phase 3: Q3 2025**
-- [ ] Mobile app (iOS/Android)
-- [ ] Multi-language support
-- [ ] Analytics dashboard
-- [ ] API marketplace
-- [ ] Browser extension
-
-</td>
-</tr>
-</table>
 
 ---
 
