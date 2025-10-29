@@ -149,13 +149,13 @@
 
 #### 🧠 **Agent System**
 ```
-🎯 Router
-   ↙️  ↘️
-📚    🌐
+  🎯 Router
+   ↙️     ↘️
+📚         🌐
 Retriever  Search
-   ↘️  ↙️
-    ✍️
-Generator
+   ↘️      ↙️
+       ✍️
+    Generator
 ```
 
 </td>
@@ -167,8 +167,8 @@ Generator
     ↓
 ✨ Validate
    ↙️  ↘️
-✅    🔄
-Good  Rewrite
+ ✅       🔄
+Good    Rewrite
 ```
 
 </td>
@@ -193,7 +193,7 @@ Good  Rewrite
 ```yaml
 Framework:     LangGraph, LangChain
 LLM Providers: Groq, Google AI
-Embeddings:    OpenAI / HuggingFace
+Embeddings:    Google
 Orchestration: Multi-Agent Workflow
 Evaluation:    RAGAS Framework
 ```
@@ -212,11 +212,11 @@ Search:        DuckDuckGo API
 
 ### 🌐 **Web & API**
 ```yaml
-Backend:       Flask
+Backend:       FastAPI
 Templates:     Jinja2
 Frontend:      HTML5, CSS3, JavaScript
 API Design:    RESTful
-Routing:       Flask Blueprints
+Framework:     ASGI (Uvicorn)
 ```
 
 ### ☁️ **DevOps & Cloud**
@@ -330,7 +330,7 @@ ecomm-prod-assistant/
 
 **Required:**
 - ✅ Python 3.11+
-- ✅ pip or poetry
+- ✅ uv or pip
 - ✅ AstraDB account
 - ✅ Groq API key
 
@@ -471,11 +471,11 @@ retrieval:
 ### 🌐 Running ShopBuddy
 
 ```bash
-# Start the web application
-python prod_assistant/router/main.py
+# Start the FastAPI application
+uvicorn prod_assistant.router.main:app --reload --port 8000
 
 # Server will start at
-http://localhost:5000
+http://localhost:8000
 ```
 
 <div align="center">
@@ -488,22 +488,23 @@ http://localhost:5000
 
 <table>
 <tr>
-<td width="50%">
+<td width="100%" colspan="2">
 
-#### **🕷️ Scrape Product Data**
+#### **🕷️ Scrape Product Data with Streamlit UI**
+
 ```bash
-python prod_assistant/etl/data_scrapper.py
+# Run the scraper interface
+streamlit run scrapper_ui.py
 ```
-*Extracts fresh data from Flipkart*
 
-</td>
-<td width="50%">
-
-#### **📥 Ingest to Database**
-```bash
-python prod_assistant/etl/data_ingestion.py
-```
-*Stores data in AstraDB with embeddings*
+**Using the Scraper UI:**
+1. Enter product name (e.g., "iPhone 16")
+2. Set number of products per search
+3. Set number of reviews per product
+4. Click "🔧 Start Scraping"
+5. Once complete:
+   - Click "📥 Download CSV" to save data locally
+   - Click "💾 Store in Vector DB (AstraDB)" to ingest into database
 
 </td>
 </tr>
@@ -514,9 +515,6 @@ python prod_assistant/etl/data_ingestion.py
 ```
 User: "What is the price of iPhone 16?"
 🤖 ShopBuddy: Searching products and web...
-
-User: "Show me the best rated laptops under 50000"
-🤖 ShopBuddy: Analyzing reviews and prices...
 
 User: "Compare Samsung Galaxy S24 with iPhone 15"
 🤖 ShopBuddy: Retrieving specifications...
@@ -624,74 +622,6 @@ git push origin main
 
 ---
 
-## 📊 Evaluation
-
-<div align="center">
-
-### *Quality Assurance with RAGAS*
-
-</div>
-
-### 🧪 Running Evaluation
-
-```bash
-python prod_assistant/evaluation/ragas_eval.py
-```
-
-### 📈 Metrics Tracked
-
-<table>
-<tr>
-<td width="25%" align="center">
-
-**📍 Context Precision**
-
-Relevance of retrieved documents
-
-</td>
-<td width="25%" align="center">
-
-**🎯 Context Recall**
-
-Coverage of relevant information
-
-</td>
-<td width="25%" align="center">
-
-**✅ Faithfulness**
-
-Alignment with sources
-
-</td>
-<td width="25%" align="center">
-
-**💬 Answer Relevancy**
-
-Response quality
-
-</td>
-</tr>
-</table>
-
-<div align="center">
-
-```
-┌─────────────────────────────────────┐
-│  📊 Sample Evaluation Results       │
-├─────────────────────────────────────┤
-│  Context Precision:    0.92         │
-│  Context Recall:       0.88         │
-│  Faithfulness:         0.95         │
-│  Answer Relevancy:     0.91         │
-│                                     │
-│  Overall Score:        0.915 ⭐     │
-└─────────────────────────────────────┘
-```
-
-</div>
-
----
-
 ## 🤝 Contributing
 
 <div align="center">
@@ -789,7 +719,7 @@ Special thanks to the amazing open-source community
 <tr>
 <td align="center" width="25%">
 
-**🦜 LangChain**
+**🦜 LangGraph**
 
 Agentic workflow framework
 
